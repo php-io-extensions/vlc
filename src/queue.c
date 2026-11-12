@@ -8,6 +8,9 @@
 
 enum { REQ_QUEUED = 0, REQ_TAKEN = 1, REQ_DONE = 2, REQ_DROPPED = 3, REQ_POSTED = 4 };
 
+/* Posted calls carrying audio or video data a queue holds at most: about 10 s of audio buffers. */
+#define VLC_POSTED_MAX 1024
+
 typedef struct vlc_deferred {
 	struct vlc_deferred *next;
 	zval callable;
@@ -23,6 +26,7 @@ struct vlc_queue {
 	zend_atomic_bool *vm_interrupt;
 	pthread_t thread;
 	int users;                     /* libvlc threads inside vlc_queue_call on this queue */
+	int posted;                    /* posted requests in the queue */
 	bool closing;
 	bool dead;                     /* this process is a fork child: libvlc's threads are gone */
 };
@@ -50,9 +54,18 @@ static void vlc_interrupt(zend_execute_data *execute_data)
 
 static void vlc_atfork_child(void)
 {
-	/* Only the forking thread exists in the child: a libvlc thread will never answer or ask. */
+	/*
+	 * Only the forking thread exists in the child: a libvlc thread will never answer or ask, and
+	 * locks or waits it held in the parent are void here. Requests in flight belonged to those threads.
+	 */
 	for (int i = 0; i < vlc_queue_count; i++) {
-		vlc_queues[i]->dead = true;
+		vlc_queue *q = vlc_queues[i];
+		q->dead = true;
+		pthread_mutex_init(&q->lock, NULL);
+		pthread_cond_init(&q->idle, NULL);
+		q->users = 0;
+		q->posted = 0;
+		q->head = q->tail = NULL;
 	}
 	pthread_mutex_init(&vlc_cb_lock, NULL);
 }
@@ -285,15 +298,18 @@ void vlc_queue_post(vlc_req *r)
 		pthread_mutex_unlock(&vlc_cb_lock);
 		vlc_serve_one(q, r);
 		free(r);
+		vlc_run_deferred(q);
 		return;
 	}
 	pthread_mutex_lock(&q->lock);
 	pthread_mutex_unlock(&vlc_cb_lock);
-	if (q->closing) {
+	/* A PHP thread that stops serving would let audio and video data pile up without bound: past the cap it is dropped. */
+	if (q->closing || (r->droppable && q->posted >= VLC_POSTED_MAX)) {
 		pthread_mutex_unlock(&q->lock);
 		free(r);
 		return;
 	}
+	q->posted++;
 	r->next = NULL;
 	r->state = REQ_POSTED;
 	if (q->tail) {
@@ -326,6 +342,7 @@ static void vlc_serve_pending(void)
 			q->tail = NULL;
 		}
 		if (r->state == REQ_POSTED) {
+			q->posted--;
 			pthread_mutex_unlock(&q->lock);
 			vlc_serve_one(q, r);
 			free(r);
@@ -396,6 +413,7 @@ static void vlc_cb_finish(vlc_cb *cb)
 			vlc_req *r = *pp;
 			if (r->state == REQ_POSTED && r->cb == cb) {
 				*pp = r->next;
+				q->posted--;
 				free(r);
 				continue;
 			}

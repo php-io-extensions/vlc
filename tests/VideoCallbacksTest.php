@@ -38,6 +38,36 @@ it('renders frames into memory PHP owns', function (): void {
     FFI::free($buf);
 })->skip(! extension_loaded('ffi'), 'needs ext-ffi to own the pixel memory');
 
+/* A lock that answers no planes gets the binding's scratch picture: every plane of it, sized from the format. */
+it('renders a planar picture into the scratch picture when the lock answers no planes', function (): void {
+    $mp = libvlc_media_player_new_from_media(libvlc_media_new_path(instance(), y4m(64, 48, 3)));
+    libvlc_video_set_format_callbacks($mp, function (string &$chroma, int &$width, int &$height, array &$pitches, array &$lines): int {
+        $chroma = 'I420';
+        $pitches = [64, 32, 32];
+        $lines = [48, 24, 24];
+
+        return 1;
+    }, null);
+    $displayed = 0;
+    libvlc_video_set_callbacks($mp, fn (): array => [], null, function () use (&$displayed): void {
+        $displayed++;
+    });
+    libvlc_media_player_play($mp);
+
+    expect(waitFor(fn () => libvlc_media_player_get_state($mp) === libvlc_Ended, 5.0))->toBeTrue()
+        ->and($displayed)->toBeGreaterThan(0);
+    libvlc_media_player_release($mp);
+});
+
+it('renders into a scratch picture with no format set at all', function (): void {
+    $mp = libvlc_media_player_new_from_media(libvlc_media_new_path(instance(), y4m(64, 48, 3)));
+    libvlc_video_set_callbacks($mp, fn (): array => [], null, null);
+    libvlc_media_player_play($mp);
+
+    expect(waitFor(fn () => libvlc_media_player_get_state($mp) === libvlc_Ended, 5.0))->toBeTrue();
+    libvlc_media_player_release($mp);
+});
+
 it('lets PHP choose the picture format', function (): void {
     $mp = libvlc_media_player_new_from_media(libvlc_media_new_path(instance(), y4m(64, 48, 2)));
     $asked = null;

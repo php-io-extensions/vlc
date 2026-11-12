@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 0dd41d179e9784cd4c997dc20b6e5ca5d62e64f1 */
+ * Stub hash: 5cbe440d68bc948cd8b59223410106644c785958 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_libvlc_media_list_new, 0, 1, libvlc_media_list_t, 1)
 	ZEND_ARG_OBJ_INFO(0, p_instance, libvlc_instance_t, 0)
@@ -73,7 +73,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_libvlc_media_list_player_set_media_player, 0, 2, IS_VOID, 0)
 	ZEND_ARG_OBJ_INFO(0, p_mlp, libvlc_media_list_player_t, 0)
-	ZEND_ARG_OBJ_INFO(0, p_mi, libvlc_media_player_t, 1)
+	ZEND_ARG_OBJ_INFO(0, p_mi, libvlc_media_player_t, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_libvlc_media_list_player_get_media_player, 0, 1, libvlc_media_player_t, 1)

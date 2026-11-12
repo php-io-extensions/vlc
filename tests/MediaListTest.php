@@ -39,3 +39,11 @@ it('plays a list through a list player', function (): void {
     libvlc_media_list_player_release($lp);
     libvlc_media_list_release($list);
 });
+
+/* libvlc retains the player it is given: null crashed it (SIGSEGV). */
+it('takes a player, never null, for the list player', function (): void {
+    $lp = libvlc_media_list_player_new(instance());
+
+    expect(fn () => libvlc_media_list_player_set_media_player($lp, null))->toThrow(TypeError::class);
+    libvlc_media_list_player_release($lp);
+});

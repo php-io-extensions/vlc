@@ -16,3 +16,10 @@ it('adds, shows, changes and deletes a broadcast', function (): void {
     libvlc_vlm_release($vlc);
     libvlc_release($vlc);
 });
+
+/* libvlc dereferences the name: null crashed libvlc_vlm_add_broadcast (SIGSEGV). */
+it('takes a VLM media name as a string, never null', function (): void {
+    expect(fn () => libvlc_vlm_add_broadcast(instance(), null, 'file:///x', '', 0, [], 1, 0))->toThrow(TypeError::class)
+        ->and(fn () => libvlc_vlm_add_vod(instance(), null, 'file:///x', 0, [], 1, null))->toThrow(TypeError::class)
+        ->and(fn () => libvlc_vlm_change_media(instance(), null, 'file:///x', '', 0, [], 1, 0))->toThrow(TypeError::class);
+});

@@ -34,6 +34,10 @@ PHP_FUNCTION(libvlc_media_discoverer_stop)
 		Z_PARAM_OBJECT_OF_CLASS(z_p_mdis, vlc_ce_libvlc_media_discoverer_t)
 	ZEND_PARSE_PARAMETERS_END();
 	VLC_ARG(libvlc_media_discoverer_t, p_mdis, z_p_mdis, 1);
+	if (!VLC_PROBE_OFF("vlc-discoverer-not-running") && !libvlc_media_discoverer_is_running(p_mdis)) {
+		zend_argument_value_error(1, "is not running"); /* binding:vlc-discoverer-not-running */
+		RETURN_THROWS();
+	}
 	libvlc_media_discoverer_stop(p_mdis);
 }
 

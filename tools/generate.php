@@ -30,7 +30,7 @@ const HANDLES = [
 /* Parameters libvlc documents as accepting NULL. */
 const NULLABLE = [
     'libvlc_media_player_set_media.p_md', 'libvlc_media_player_set_equalizer.p_equalizer',
-    'libvlc_media_player_set_renderer.p_item', 'libvlc_media_list_player_set_media_player.p_mi',
+    'libvlc_media_player_set_renderer.p_item',
 ];
 
 /* Not exported by the 3.0.24 dylib: declared, but nothing to link. */
@@ -202,6 +202,12 @@ foreach (GROUPS[$group] as $header) {
         if ($name === 'libvlc_media_list_player_get_media_player') {
             $after = "\n\tvlc_held_seen(p_mlp, result);";
         }
+        /* libvlc stops the services discovery it holds without checking for one: none before a successful start. */
+        if ($name === 'libvlc_media_discoverer_stop') {
+            $pre[] = "\tif (!VLC_PROBE_OFF(\"vlc-discoverer-not-running\") && !libvlc_media_discoverer_is_running(p_mdis)) {\n"
+                ."\t\tzend_argument_value_error(1, \"is not running\"); /* binding:vlc-discoverer-not-running */\n"
+                ."\t\tRETURN_THROWS();\n\t}";
+        }
         /* The VLM's event manager goes with the VLM. */
         if ($name === 'libvlc_vlm_release') {
             $pre[] = "\tvlc_events_gone(p_instance);";
@@ -221,6 +227,10 @@ foreach (GROUPS[$group] as $header) {
             'float' => "\tRETURN_DOUBLE({$invoke});",
             'bool' => "\tRETURN_BOOL({$invoke});",
         };
+        /* libvlc frees the dialog id in these: its handle is released with it. */
+        if (in_array($name, ['libvlc_dialog_post_login', 'libvlc_dialog_post_action', 'libvlc_dialog_dismiss'], true)) {
+            $result = "\tint result = {$invoke};\n\tvlc_release(p_id, vlc_ce_libvlc_dialog_id);\n\tRETURN_LONG(result);";
+        }
         $n = count($args);
         $body = $n === 0 ? "\tZEND_PARSE_PARAMETERS_NONE();\n" : implode("\n", $decl)."\n\n\tZEND_PARSE_PARAMETERS_START({$n}, {$n})\n".implode("\n", $parse)."\n\tZEND_PARSE_PARAMETERS_END();\n";
         $c .= "\nPHP_FUNCTION({$name})\n{\n{$body}".($pre !== [] ? implode("\n", $pre)."\n" : '')."{$result}{$after}\n}\n";

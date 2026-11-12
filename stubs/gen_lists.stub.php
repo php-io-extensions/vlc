@@ -42,7 +42,7 @@ function libvlc_media_list_player_retain(libvlc_media_list_player_t $p_mlp): voi
 
 function libvlc_media_list_player_event_manager(libvlc_media_list_player_t $p_mlp): ?libvlc_event_manager_t {}
 
-function libvlc_media_list_player_set_media_player(libvlc_media_list_player_t $p_mlp, ?libvlc_media_player_t $p_mi): void {}
+function libvlc_media_list_player_set_media_player(libvlc_media_list_player_t $p_mlp, libvlc_media_player_t $p_mi): void {}
 
 function libvlc_media_list_player_get_media_player(libvlc_media_list_player_t $p_mlp): ?libvlc_media_player_t {}
 

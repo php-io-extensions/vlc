@@ -250,16 +250,10 @@ PHP_FUNCTION(libvlc_media_list_player_set_media_player)
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT_OF_CLASS(z_p_mlp, vlc_ce_libvlc_media_list_player_t)
-		Z_PARAM_OBJECT_OF_CLASS_OR_NULL(z_p_mi, vlc_ce_libvlc_media_player_t)
+		Z_PARAM_OBJECT_OF_CLASS(z_p_mi, vlc_ce_libvlc_media_player_t)
 	ZEND_PARSE_PARAMETERS_END();
 	VLC_ARG(libvlc_media_list_player_t, p_mlp, z_p_mlp, 1);
-	libvlc_media_player_t *p_mi = NULL;
-	if (z_p_mi != NULL) {
-		p_mi = vlc_handle_arg(z_p_mi, 2);
-		if (EG(exception)) {
-			RETURN_THROWS();
-		}
-	}
+	VLC_ARG(libvlc_media_player_t, p_mi, z_p_mi, 2);
 	void *held = vlc_held_set(p_mlp, p_mi);
 	libvlc_media_list_player_set_media_player(p_mlp, p_mi);
 	vlc_held_released(held);

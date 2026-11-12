@@ -40,7 +40,9 @@ PHP_FUNCTION(libvlc_dialog_post_login)
 		Z_PARAM_BOOL(b_store)
 	ZEND_PARSE_PARAMETERS_END();
 	VLC_ARG(libvlc_dialog_id, p_id, z_p_id, 1);
-	RETURN_LONG(libvlc_dialog_post_login(p_id, psz_username != NULL ? ZSTR_VAL(psz_username) : NULL, psz_password != NULL ? ZSTR_VAL(psz_password) : NULL, b_store));
+	int result = libvlc_dialog_post_login(p_id, psz_username != NULL ? ZSTR_VAL(psz_username) : NULL, psz_password != NULL ? ZSTR_VAL(psz_password) : NULL, b_store);
+	vlc_release(p_id, vlc_ce_libvlc_dialog_id);
+	RETURN_LONG(result);
 }
 
 PHP_FUNCTION(libvlc_dialog_post_action)
@@ -53,7 +55,9 @@ PHP_FUNCTION(libvlc_dialog_post_action)
 		Z_PARAM_LONG(i_action)
 	ZEND_PARSE_PARAMETERS_END();
 	VLC_ARG(libvlc_dialog_id, p_id, z_p_id, 1);
-	RETURN_LONG(libvlc_dialog_post_action(p_id, (int) i_action));
+	int result = libvlc_dialog_post_action(p_id, (int) i_action);
+	vlc_release(p_id, vlc_ce_libvlc_dialog_id);
+	RETURN_LONG(result);
 }
 
 PHP_FUNCTION(libvlc_dialog_dismiss)
@@ -64,7 +68,9 @@ PHP_FUNCTION(libvlc_dialog_dismiss)
 		Z_PARAM_OBJECT_OF_CLASS(z_p_id, vlc_ce_libvlc_dialog_id)
 	ZEND_PARSE_PARAMETERS_END();
 	VLC_ARG(libvlc_dialog_id, p_id, z_p_id, 1);
-	RETURN_LONG(libvlc_dialog_dismiss(p_id));
+	int result = libvlc_dialog_dismiss(p_id);
+	vlc_release(p_id, vlc_ce_libvlc_dialog_id);
+	RETURN_LONG(result);
 }
 
 void vlc_register_gen_dialog(void)

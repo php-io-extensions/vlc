@@ -42,6 +42,7 @@ typedef struct vlc_req {
 	vlc_cb *cb;
 	struct vlc_req *next;
 	int state;
+	bool droppable;                       /* posted audio or video data: dropped past the backlog cap */
 	pthread_cond_t done;
 } vlc_req;
 

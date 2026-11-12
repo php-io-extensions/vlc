@@ -32,6 +32,10 @@ PHP_FUNCTION(libvlc_printerr)
 		Z_PARAM_STR(fmt)
 		Z_PARAM_VARIADIC('*', args, argc)
 	ZEND_PARSE_PARAMETERS_END();
+	if (!VLC_PROBE_OFF("vlc-printerr-no-instance") && !vlc_instance_seen) {
+		zend_throw_error(NULL, "libvlc_printerr(): no libvlc_instance_t yet: libvlc sets up its error state in the first libvlc_new()"); /* binding:vlc-printerr-no-instance */
+		RETURN_THROWS();
+	}
 
 	zval *params = safe_emalloc(argc + 1, sizeof(zval), 0);
 	ZVAL_STR(&params[0], fmt);

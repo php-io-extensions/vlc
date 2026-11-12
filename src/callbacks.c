@@ -466,6 +466,7 @@ static vlc_post_req *vlc_post_new(void *data, int slot, int argc, size_t len)
 	r->argc = argc;
 	r->bytes_at = -1;
 	r->len = len;
+	r->base.droppable = len > 0;
 	return r;
 }
 
@@ -851,6 +852,7 @@ enum { VIDEO_LOCK, VIDEO_UNLOCK, VIDEO_DISPLAY, VIDEO_SETUP, VIDEO_CLEANUP };
 
 typedef struct {
 	size_t size;     /* bytes of one picture in the current format; 0 until known */
+	size_t planes[VLC_PLANES]; /* bytes of each plane, in order; all 0 until known */
 	size_t scratch_size;
 	void *scratch;   /* where libvlc renders when the lock callable does not answer */
 } vlc_video_native;
@@ -882,12 +884,20 @@ static void vlc_lock_fallback(vlc_req *base)
 	vlc_lock_req *r = (vlc_lock_req *) base;
 	vlc_video_native *v = base->cb->native;
 
-	if (v->scratch_size != v->size) {
+	/* Format unknown: vmem's defaults (RV16, 320 x 200, pitch 640). */
+	size_t size = v->size > 0 ? v->size : 640 * 200;
+
+	if (v->scratch_size != size) {
 		free(v->scratch);
-		v->scratch = v->size > 0 ? malloc(v->size) : NULL;
-		v->scratch_size = v->scratch != NULL ? v->size : 0;
+		v->scratch = calloc(1, size);
+		v->scratch_size = v->scratch != NULL ? size : 0;
 	}
-	r->planes[0] = v->scratch;
+	/* libvlc writes every plane of the picture: each gets its own part of the scratch picture. */
+	size_t at = 0;
+	for (int i = 0; i < VLC_PLANES; i++) {
+		r->planes[i] = v->scratch != NULL && (i == 0 || v->planes[i] > 0) ? (char *) v->scratch + at : NULL;
+		at += v->planes[i];
+	}
 	r->picture = v->scratch;
 }
 
@@ -1009,11 +1019,12 @@ static void vlc_format_serve(vlc_req *base)
 		vlc_list_into(Z_REFVAL(argv[3]), r->pitches);
 		vlc_list_into(Z_REFVAL(argv[4]), r->lines);
 		r->result = (unsigned) zval_get_long(&ret);
-		size_t size = 0;
+		vlc_video_native *v = base->cb->native;
+		v->size = 0;
 		for (int i = 0; i < VLC_PLANES; i++) {
-			size += (size_t) r->pitches[i] * r->lines[i];
+			v->planes[i] = (size_t) r->pitches[i] * r->lines[i];
+			v->size += v->planes[i];
 		}
-		((vlc_video_native *) base->cb->native)->size = size;
 		zval_ptr_dtor(&ret);
 	} else {
 		vlc_format_fallback(base);
@@ -1090,7 +1101,11 @@ PHP_FUNCTION(libvlc_video_set_format)
 
 	/* A planar chroma's further planes follow the first: three planes' worth covers every libvlc chroma. */
 	vlc_cb *cb = vlc_video_cb(mp);
-	((vlc_video_native *) cb->native)->size = (size_t) pitch * (size_t) height * 3;
+	vlc_video_native *v = cb->native;
+	for (int i = 0; i < VLC_PLANES; i++) {
+		v->planes[i] = i < 3 ? (size_t) pitch * (size_t) height : 0;
+	}
+	v->size = v->planes[0] * 3;
 	libvlc_video_set_format(mp, ZSTR_VAL(chroma), (unsigned) width, (unsigned) height, (unsigned) pitch);
 }
 

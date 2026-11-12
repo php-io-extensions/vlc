@@ -20,7 +20,9 @@
   "sites": {
     "vlc-no-instance": {"kind": "refusal", "outcome": 2, "probe": "tests/Probes/NoInstanceTest.php"},
     "vlc-released-handle": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/ReleasedHandleTest.php"},
-    "vlc-list-count": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/ListCountTest.php"}
+    "vlc-list-count": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/ListCountTest.php"},
+    "vlc-printerr-no-instance": {"kind": "refusal", "outcome": 2, "probe": "tests/Probes/NoInstanceTest.php"},
+    "vlc-discoverer-not-running": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/DiscovererNotRunningTest.php"}
   },
   "typemap": {"FILE*": ["int"], "uintptr_t": ["int"], "libvlc_dialog_cbs*": ["libvlc_dialog_cbs"]}
 }
