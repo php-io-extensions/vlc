@@ -1,0 +1,62 @@
+{
+    "name": "php-io-extensions/vlc",
+    "type": "php-ext",
+    "description": "1:1 PHP bindings of libvlc 3.0: instance, media, media player, media lists, discoverers, renderers, VLM, events and callbacks",
+    "keywords": [
+        "libvlc",
+        "vlc",
+        "video",
+        "audio",
+        "php-ext"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Project Saturn Studios, LLC",
+            "email": "info@projectsaturnstudios.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.11.x-dev"
+        },
+        "venusian": {
+            "system": {
+                "apt": {
+                    "depends": [
+                        "libvlc5",
+                        "vlc-plugin-base"
+                    ]
+                }
+            }
+        }
+    },
+    "php-ext": {
+        "extension-name": "vlc",
+        "priority": 30,
+        "support-zts": true,
+        "support-nts": true,
+        "os-families": [
+            "linux",
+            "darwin"
+        ],
+        "configure-options": [
+            {
+                "name": "with-vlc",
+                "description": "Enable the vlc extension; the value is the prefix holding include/vlc/vlc.h",
+                "needs-value": false
+            }
+        ]
+    }
+}

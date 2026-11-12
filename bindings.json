@@ -1,0 +1,26 @@
+{
+  "symbols": {},
+  "glue": {
+    "*": {"methods": ["pointer", "fromPointer"], "forwards": "address hand-off on every handle class"},
+    "libvlc_audio_output_t": {"methods": [], "forwards": "libvlc_audio_output_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_audio_output_device_t": {"methods": [], "forwards": "libvlc_audio_output_device_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_track_description_t": {"methods": [], "forwards": "libvlc_track_description_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_module_description_t": {"methods": [], "forwards": "libvlc_module_description_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_media_track_t": {"methods": [], "forwards": "libvlc_media_track_t's fields as readonly properties, read from the native struct on each access; the union member matching i_type, the others null"},
+    "libvlc_audio_track_t": {"methods": [], "forwards": "libvlc_audio_track_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_video_track_t": {"methods": [], "forwards": "libvlc_video_track_t's fields as readonly properties, read from the native struct on each access; pose as a libvlc_video_viewpoint_t copy"},
+    "libvlc_subtitle_track_t": {"methods": [], "forwards": "libvlc_subtitle_track_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_title_description_t": {"methods": [], "forwards": "libvlc_title_description_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_chapter_description_t": {"methods": [], "forwards": "libvlc_chapter_description_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_media_slave_t": {"methods": [], "forwards": "libvlc_media_slave_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_media_discoverer_description_t": {"methods": [], "forwards": "libvlc_media_discoverer_description_t's fields as readonly properties, read from the native struct on each access"},
+    "libvlc_rd_description_t": {"methods": [], "forwards": "libvlc_rd_description_t's fields as readonly properties, read from the native struct on each access"}
+  },
+  "helpers": {"marshal": ["vlc_handle_arg", "vlc_list_count", "vlc_list_ptrs", "vlc_strings_from"], "translate": []},
+  "sites": {
+    "vlc-no-instance": {"kind": "refusal", "outcome": 2, "probe": "tests/Probes/NoInstanceTest.php"},
+    "vlc-released-handle": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/ReleasedHandleTest.php"},
+    "vlc-list-count": {"kind": "refusal", "outcome": 1, "probe": "tests/Probes/ListCountTest.php"}
+  },
+  "typemap": {"FILE*": ["int"], "uintptr_t": ["int"], "libvlc_dialog_cbs*": ["libvlc_dialog_cbs"]}
+}
