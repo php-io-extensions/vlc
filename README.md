@@ -72,7 +72,7 @@ libvlc calls back on its own threads. PHP never runs there: the call is handed t
 | `libvlc_video_set_format_callbacks` | setup `fn(string &$chroma, int &$width, int &$height, array &$pitches, array &$lines): int`, cleanup `fn()` | setup ≤ 5 s |
 | `libvlc_dialog_set_callbacks` | one Closure per `libvlc_dialog_cbs` field, with the C parameters after `p_data` | never |
 
-A call the PHP thread does not reach in time gets libvlc's no-op: media callbacks report an error, the audio setup refuses, the video lock renders into a scratch picture the extension owns. An exception thrown by a callable surfaces at the PHP thread's next interrupt point. When the request ends, every callable is dropped and libvlc gets the no-ops.
+Audio and video data waiting for the PHP thread is capped at 1024 calls; past that, new data is dropped. A call the PHP thread does not reach in time gets libvlc's no-op: media callbacks report an error, the audio setup refuses, the video lock renders into a scratch picture the extension owns. An exception thrown by a callable surfaces at the PHP thread's next interrupt point. When the request ends, every callable is dropped and libvlc gets the no-ops.
 
 ### Lifetime
 
@@ -94,6 +94,8 @@ The extension refuses a call only where libvlc would crash the process:
 | `vlc-no-instance` | `libvlc_clearerr()` before the process's first `libvlc_new()` | `Error` |
 | `vlc-released-handle` | a handle whose last counted reference was released, or a list element after its list's `*_release` | `ValueError` |
 | `vlc-list-count` | a count past its list | `ValueError` |
+| `vlc-printerr-no-instance` | `libvlc_printerr()` before the process's first `libvlc_new()` | `Error` |
+| `vlc-discoverer-not-running` | `libvlc_media_discoverer_stop()` on a discoverer that is not running | `ValueError` |
 
 The reference-counted classes (instance, media, media player, media list, list player, media library, renderer item) count the references the extension handed out: creation, `*_retain` / `_hold`, and the getters libvlc documents as returning a new reference. A handle the extension never counted (`fromPointer`, an event's pointer) counts as one.
 
@@ -103,7 +105,9 @@ The reference-counted classes (instance, media, media player, media list, list p
 putenv('VLC_PLUGIN_PATH=/Applications/VLC.app/Contents/MacOS/plugins'); // macOS
 
 $vlc = libvlc_new(1, ['--quiet']);
-$mp = libvlc_media_player_new_from_media(libvlc_media_new_path($vlc, '/path/to/song.mp3'));
+$media = libvlc_media_new_path($vlc, '/path/to/song.mp3');
+$mp = libvlc_media_player_new_from_media($media);
+libvlc_media_release($media);   // the player holds its own reference
 
 $ended = false;
 libvlc_event_attach(libvlc_media_player_event_manager($mp), libvlc_MediaPlayerEndReached,

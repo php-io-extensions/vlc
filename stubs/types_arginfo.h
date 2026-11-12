@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: d7dfda6441e31500c19e94f097e179c0a5b4f073 */
+ * Stub hash: 72bca57b1390fc38fa0fc252a16fe6ec1696c8b0 */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_libvlc_instance_t___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -517,7 +517,7 @@ static zend_class_entry *register_class_libvlc_event_manager_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_event_manager_t", class_libvlc_event_manager_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	return class_entry;
 }
@@ -537,7 +537,7 @@ static zend_class_entry *register_class_libvlc_log_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_log_t", class_libvlc_log_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	return class_entry;
 }
@@ -547,7 +547,7 @@ static zend_class_entry *register_class_libvlc_dialog_id(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_dialog_id", class_libvlc_dialog_id_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	return class_entry;
 }
@@ -557,7 +557,7 @@ static zend_class_entry *register_class_libvlc_audio_output_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_audio_output_t", class_libvlc_audio_output_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_name_default_value;
 	ZVAL_UNDEF(&property_psz_name_default_value);
@@ -586,7 +586,7 @@ static zend_class_entry *register_class_libvlc_audio_output_device_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_audio_output_device_t", class_libvlc_audio_output_device_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_p_next_default_value;
 	ZVAL_UNDEF(&property_p_next_default_value);
@@ -615,7 +615,7 @@ static zend_class_entry *register_class_libvlc_track_description_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_track_description_t", class_libvlc_track_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_i_id_default_value;
 	ZVAL_UNDEF(&property_i_id_default_value);
@@ -644,7 +644,7 @@ static zend_class_entry *register_class_libvlc_module_description_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_module_description_t", class_libvlc_module_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_name_default_value;
 	ZVAL_UNDEF(&property_psz_name_default_value);
@@ -770,7 +770,7 @@ static zend_class_entry *register_class_libvlc_audio_track_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_audio_track_t", class_libvlc_audio_track_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_i_channels_default_value;
 	ZVAL_UNDEF(&property_i_channels_default_value);
@@ -792,7 +792,7 @@ static zend_class_entry *register_class_libvlc_video_track_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_video_track_t", class_libvlc_video_track_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_i_height_default_value;
 	ZVAL_UNDEF(&property_i_height_default_value);
@@ -857,7 +857,7 @@ static zend_class_entry *register_class_libvlc_subtitle_track_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_subtitle_track_t", class_libvlc_subtitle_track_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_encoding_default_value;
 	ZVAL_UNDEF(&property_psz_encoding_default_value);
@@ -873,7 +873,7 @@ static zend_class_entry *register_class_libvlc_title_description_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_title_description_t", class_libvlc_title_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_i_duration_default_value;
 	ZVAL_UNDEF(&property_i_duration_default_value);
@@ -901,7 +901,7 @@ static zend_class_entry *register_class_libvlc_chapter_description_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_chapter_description_t", class_libvlc_chapter_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_i_time_offset_default_value;
 	ZVAL_UNDEF(&property_i_time_offset_default_value);
@@ -929,7 +929,7 @@ static zend_class_entry *register_class_libvlc_media_slave_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_media_slave_t", class_libvlc_media_slave_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_uri_default_value;
 	ZVAL_UNDEF(&property_psz_uri_default_value);
@@ -957,7 +957,7 @@ static zend_class_entry *register_class_libvlc_media_discoverer_description_t(vo
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_media_discoverer_description_t", class_libvlc_media_discoverer_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_name_default_value;
 	ZVAL_UNDEF(&property_psz_name_default_value);
@@ -985,7 +985,7 @@ static zend_class_entry *register_class_libvlc_rd_description_t(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "libvlc_rd_description_t", class_libvlc_rd_description_t_methods);
-	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL);
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_FINAL|ZEND_ACC_NOT_SERIALIZABLE);
 
 	zval property_psz_name_default_value;
 	ZVAL_UNDEF(&property_psz_name_default_value);

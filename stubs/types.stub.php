@@ -105,7 +105,10 @@ final class libvlc_renderer_item_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Belongs to its parent (instance, media, player, list, list player, discoverers): released with it. @not-serializable */
+/**
+ * Belongs to its parent (instance, media, player, list, list player, discoverers): released with it.
+ * @not-serializable
+ */
 final class libvlc_event_manager_t
 {
     private function __construct() {}
@@ -125,7 +128,10 @@ final class libvlc_equalizer_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Valid only inside the log callable that receives it. @not-serializable */
+/**
+ * Valid only inside the log callable that receives it.
+ * @not-serializable
+ */
 final class libvlc_log_t
 {
     private function __construct() {}
@@ -135,7 +141,10 @@ final class libvlc_log_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Valid until the dialog is answered or dismissed. @not-serializable */
+/**
+ * Valid until the dialog is answered or dismissed.
+ * @not-serializable
+ */
 final class libvlc_dialog_id
 {
     private function __construct() {}
@@ -145,7 +154,10 @@ final class libvlc_dialog_id
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_audio_output_list_get(). @not-serializable */
+/**
+ * Element of libvlc_audio_output_list_get().
+ * @not-serializable
+ */
 final class libvlc_audio_output_t
 {
     public readonly ?string $psz_name;
@@ -159,7 +171,10 @@ final class libvlc_audio_output_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_audio_output_device_list_get() / libvlc_audio_output_device_enum(). @not-serializable */
+/**
+ * Element of libvlc_audio_output_device_list_get() / libvlc_audio_output_device_enum().
+ * @not-serializable
+ */
 final class libvlc_audio_output_device_t
 {
     public readonly ?libvlc_audio_output_device_t $p_next;
@@ -173,7 +188,10 @@ final class libvlc_audio_output_device_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of the track description lists. @not-serializable */
+/**
+ * Element of the track description lists.
+ * @not-serializable
+ */
 final class libvlc_track_description_t
 {
     public readonly int $i_id;
@@ -187,7 +205,10 @@ final class libvlc_track_description_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_audio_filter_list_get() / libvlc_video_filter_list_get(). @not-serializable */
+/**
+ * Element of libvlc_audio_filter_list_get() / libvlc_video_filter_list_get().
+ * @not-serializable
+ */
 final class libvlc_module_description_t
 {
     public readonly ?string $psz_name;
@@ -230,7 +251,10 @@ final class libvlc_media_track_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** libvlc_media_track_t.audio. @not-serializable */
+/**
+ * libvlc_media_track_t.audio.
+ * @not-serializable
+ */
 final class libvlc_audio_track_t
 {
     public readonly int $i_channels;
@@ -243,7 +267,10 @@ final class libvlc_audio_track_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** libvlc_media_track_t.video. pose is a copy of the embedded struct. @not-serializable */
+/**
+ * libvlc_media_track_t.video. pose is a copy of the embedded struct.
+ * @not-serializable
+ */
 final class libvlc_video_track_t
 {
     public readonly int $i_height;
@@ -263,7 +290,10 @@ final class libvlc_video_track_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** libvlc_media_track_t.subtitle. @not-serializable */
+/**
+ * libvlc_media_track_t.subtitle.
+ * @not-serializable
+ */
 final class libvlc_subtitle_track_t
 {
     public readonly ?string $psz_encoding;
@@ -275,7 +305,10 @@ final class libvlc_subtitle_track_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_media_player_get_full_title_descriptions(). @not-serializable */
+/**
+ * Element of libvlc_media_player_get_full_title_descriptions().
+ * @not-serializable
+ */
 final class libvlc_title_description_t
 {
     public readonly int $i_duration;
@@ -289,7 +322,10 @@ final class libvlc_title_description_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_media_player_get_full_chapter_descriptions(). @not-serializable */
+/**
+ * Element of libvlc_media_player_get_full_chapter_descriptions().
+ * @not-serializable
+ */
 final class libvlc_chapter_description_t
 {
     public readonly int $i_time_offset;
@@ -303,7 +339,10 @@ final class libvlc_chapter_description_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_media_slaves_get(). @not-serializable */
+/**
+ * Element of libvlc_media_slaves_get().
+ * @not-serializable
+ */
 final class libvlc_media_slave_t
 {
     public readonly ?string $psz_uri;
@@ -317,7 +356,10 @@ final class libvlc_media_slave_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_media_discoverer_list_get(). @not-serializable */
+/**
+ * Element of libvlc_media_discoverer_list_get().
+ * @not-serializable
+ */
 final class libvlc_media_discoverer_description_t
 {
     public readonly ?string $psz_name;
@@ -331,7 +373,10 @@ final class libvlc_media_discoverer_description_t
     public static function fromPointer(int $pointer): ?static {}
 }
 
-/** Element of libvlc_renderer_discoverer_list_get(). @not-serializable */
+/**
+ * Element of libvlc_renderer_discoverer_list_get().
+ * @not-serializable
+ */
 final class libvlc_rd_description_t
 {
     public readonly ?string $psz_name;

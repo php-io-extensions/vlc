@@ -6,7 +6,9 @@ declare(strict_types=1);
 function y4m(int $w, int $h, int $frames): string
 {
     $frame = "FRAME\n".str_repeat("\x80", $w * $h + 2 * intdiv($w, 2) * intdiv($h, 2));
-    $file = tempnam(sys_get_temp_dir(), 'vlc').'.y4m';
+    $base = tempnam(sys_get_temp_dir(), 'vlc');
+    $file = $base.'.y4m';
+    register_shutdown_function(fn () => @unlink($base));
     file_put_contents($file, "YUV4MPEG2 W{$w} H{$h} F25:1 Ip A1:1 C420jpeg\n".str_repeat($frame, $frames));
     register_shutdown_function(fn () => @unlink($file));
 

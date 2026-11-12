@@ -18,11 +18,13 @@ const VLC_LIST_ELEMENT_CLASSES = [
 it('makes every handle class final, not constructable, not cloneable, not serializable', function (string $class): void {
     $reflection = new ReflectionClass($class);
 
+    $handle = $class::fromPointer(1);   // never dereferenced: serialize() only reads the class
+
     expect($reflection->isFinal())->toBeTrue()
         ->and($reflection->getConstructor()->isPrivate())->toBeTrue()
         ->and($reflection->isCloneable())->toBeFalse()
         ->and($class::fromPointer(0))->toBeNull()
-        ->and(fn () => serialize($reflection->newInstanceWithoutConstructor()))->toThrow(Exception::class);
+        ->and(fn () => serialize($handle))->toThrow(Exception::class, 'is not allowed');
 })->with([...VLC_HANDLE_CLASSES, ...VLC_LIST_ELEMENT_CLASSES]);
 
 it('gives one PHP object per native address', function (): void {

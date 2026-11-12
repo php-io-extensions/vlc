@@ -31,7 +31,9 @@ function wav(float $seconds = 0.5): string
         $s = (int) (sin(2 * M_PI * 440 * $i / 44100) * 8000);
         $pcm .= pack('v2', $s & 0xFFFF, $s & 0xFFFF);
     }
-    $file = tempnam(sys_get_temp_dir(), 'vlc').'.wav';
+    $base = tempnam(sys_get_temp_dir(), 'vlc');
+    $file = $base.'.wav';
+    register_shutdown_function(fn () => @unlink($base));
     file_put_contents($file, 'RIFF'.pack('V', 36 + strlen($pcm)).'WAVEfmt '.pack('VvvVVvv', 16, 1, 2, 44100, 44100 * 4, 4, 16).'data'.pack('V', strlen($pcm)).$pcm);
     register_shutdown_function(fn () => @unlink($file));
 

@@ -55,7 +55,7 @@
             {
                 "name": "with-vlc",
                 "description": "Enable the vlc extension; the value is the prefix holding include/vlc/vlc.h",
-                "needs-value": false
+                "needs-value": true
             }
         ]
     }

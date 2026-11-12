@@ -36,7 +36,7 @@ libvlc calls back on its own threads; PHP never runs there (`src/queue.c`, porte
 
 * **Waited** (`vlc_queue_call`): media open/read/seek, audio setup, video lock/format, log. The libvlc thread posts, raises the owner's `vm_interrupt`, waits up to its deadline (lock 100 ms; setup, format, media 5 s; log 1 s), then gets the no-op. A call fired on the owner thread itself is served at once.
 * **Deferred** (`vlc_defer`): events and the exit handler. The serve copies the data into zvals; the libvlc thread is let go; the callable runs afterwards. A synchronous serve deadlocked `libvlc_media_player_stop` called inside an event callable: the emitting thread waited on the callable that joined it.
-* **Posted** (`vlc_queue_post`): audio play/pause/resume/flush/drain/volume/cleanup, video unlock/display/cleanup, media close, dialogs. Arguments are copied into a malloc'd request; libvlc never waits.
+* **Posted** (`vlc_queue_post`): audio play/pause/resume/flush/drain/volume/cleanup, video unlock/display/cleanup, media close, dialogs. Arguments are copied into a malloc'd request; libvlc never waits. Requests carrying audio or video data are capped at 1024 per queue (`VLC_POSTED_MAX`); past that they are dropped.
 
 Request end (`vlc_queue_rshutdown`) gives every record its no-op, drops queued and posted calls, waits for libvlc threads inside a call, frees the callables. libvlc keeps the records' native parts until their object goes, as below.
 
@@ -57,6 +57,10 @@ A record (`vlc_cb`) is freed when libvlc can no longer call it. libvlc 3.0 annou
 * `vlc-no-instance` — `libvlc_clearerr()` before the first `libvlc_new()`: libvlc aborts (SIGABRT). `libvlc_errmsg()` there reads a foreign thread slot but does not crash, so it passes through.
 * `vlc-released-handle` — in `vlc_handle_arg`: a NULL handle reaching libvlc segfaults.
 * `vlc-list-count` — in `vlc_list_count`: a count past its list reads past the array (segfaults under libgmalloc).
+* `vlc-printerr-no-instance` — `libvlc_printerr()` before the first `libvlc_new()` frees the uncreated error slot: SIGABRT.
+* `vlc-discoverer-not-running` — `libvlc_media_discoverer_stop()` dereferences its services discovery, NULL unless started: SIGSEGV. Checked with libvlc's own `libvlc_media_discoverer_is_running()`.
+
+Not refused but typed: a null `$p_mi` to `libvlc_media_list_player_set_media_player` and a null VLM media name both segfault, so those parameters are non-nullable. A fuzz of every other nullable string parameter with null found no crash.
 
 # Citations
 
